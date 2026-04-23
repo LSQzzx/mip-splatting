@@ -129,10 +129,10 @@ class GaussianModel:
         scales = self.get_scaling
         
         scales_square = torch.square(scales)
-        det1 = scales_square.prod(dim=1)
+        det1 = scales_square[:, 0] * scales_square[:, 1] * scales_square[:, 2]
         
         scales_after_square = scales_square + torch.square(self.filter_3D) 
-        det2 = scales_after_square.prod(dim=1) 
+        det2 = scales_after_square[:, 0] * scales_after_square[:, 1] * scales_after_square[:, 2]
         coef = torch.sqrt(det1 / det2)
         return opacity * coef[..., None]
 
@@ -316,10 +316,10 @@ class GaussianModel:
         scales = self.get_scaling
         
         scales_square = torch.square(scales)
-        det1 = scales_square.prod(dim=1)
+        det1 = scales_square[:, 0] * scales_square[:, 1] * scales_square[:, 2]
         
         scales_after_square = scales_square + torch.square(self.filter_3D) 
-        det2 = scales_after_square.prod(dim=1) 
+        det2 = scales_after_square[:, 0] * scales_after_square[:, 1] * scales_after_square[:, 2]
         coef = torch.sqrt(det1 / det2)
         opacities_new = opacities_new / coef[..., None]
         opacities_new = inverse_sigmoid(opacities_new)
